@@ -20,11 +20,14 @@ ROOT_DIR = os.path.dirname(BASE_DIR)
 # instagram_project/.config_secret/
 CONFIG_SECRET_DIR = os.path.join(ROOT_DIR, '.config_secret')
 
-#instagram_project/instagram/media/
+# instagram_project/instagram/media/
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
-#instagram_project/instagram/static/
+# instagram_project/instagram/static/
 STATIC_DIR = os.path.join(BASE_DIR, 'static')
+
+# templates
+TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
 
 f = open(os.path.join(CONFIG_SECRET_DIR, "settings_common.json"), 'r')
 config_secret_common_str = f.read()
@@ -32,7 +35,6 @@ f.close()
 
 config_secret_common = json.loads(config_secret_common_str)
 SECRET_KEY = config_secret_common['django']['secret_key']
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
@@ -76,7 +78,9 @@ ROOT_URLCONF = 'config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            TEMPLATES_DIR,
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
