@@ -1,5 +1,3 @@
-<!--Template language의 for구문을 사용해서 각 Post의 photo항목을 출력-->
-
 <!doctype html>
 <html lang="en">
 <head>
@@ -10,13 +8,23 @@
     <title>Document</title>
 </head>
 <body>
+
 <div>
 
-     {% for post in posts %}
+    {% for post in posts %}
+    <img src="{{ post.photo.url }}">
     <div>{{ post.photo }}</div>
 
-</div>
+        {% for comment in comments %}
+            {% if post.id == comment.post_id %}
+                {{ comment.content }}<br>
+            {% endif %}
+        {% endfor %}
+        <br><br>
 
+    {% endfor %}
+
+</div>
 
 
 </body>

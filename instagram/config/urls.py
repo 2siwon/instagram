@@ -17,11 +17,14 @@ from django.conf import settings
 from django.conf.urls import url
 from django.conf.urls.static import static
 from django.contrib import admin
+
 from post import views
+from post.views import post_list
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^post/', views.post_list, name='post_list'),
+    url(r'^post/$', post_list, name='post_list'),
+    url(r'post/create/$', views.post_create, name='post_create'),
 ]
 urlpatterns += static(
     settings.MEDIA_URL,
