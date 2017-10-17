@@ -2,16 +2,36 @@
 {% block content %}
 
 <div>
+        <div id="first">first</div>
+        <a href="#last">맨 밑으로</a>
 
     {% for post in posts %}
-    <a href="{% url 'post_detail' post_pk=post.pk %}">
-        <img src="{{ post.photo.url }}">
-    </a>
+    <div id="post-{{ post.pk }}">
+        <a href="{% url 'post_detail' post_pk=post.pk %}">
+            <img src="{{ post.photo.url }}">
+        </a>
 
-        <p><strong>댓글</strong></p>
+            <p><strong>댓글</strong></p>
 
 
+
+        <form action="{% url 'comment_create' post_pk=post.pk %}?next=/post/#post-comments-{{ post.pk }}" method="POST">
+            {% csrf_token %}
+            {{ comment_form }}
+            <button class="btn btn-block btn-primary">댓글 달기</button>
+        </form>
+
+        <ul id="post-comments-{{ post.pk }}">
+            {% for comment in post.comments.all %}
+            <li>{{ comment.content }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    <br><br><br><br><br><br>
     {% endfor %}
+
+    <div id="last">last</div>
+    <a href="#first">맨 위로</a>
 
 </div>
 

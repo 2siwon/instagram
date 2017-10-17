@@ -14,11 +14,11 @@ def post_list(request):
     :return:
     """
     posts = Post.objects.all()
-    comments = PostComment.objects.all()
+    comment_form = CommentForm()
 
     context = {
         'posts': posts,
-        'comments': comments,
+        'comment_form': comment_form,
     }
 
     return render(request, 'post/post_list.html', context)
@@ -65,7 +65,6 @@ def post_detail(request, post_pk):
 
 
 def comment_create(request, post_pk):
-
     # URL get parameter로 온 'post_pk'에 해당하는
     # Post instacne를 'post'변수에 할당
     # 찾지못하면 404Error를 브라우저에 리턴
@@ -81,7 +80,11 @@ def comment_create(request, post_pk):
                 content=form.cleaned_data['content']
             )
 
+            # post_list에서 오는 요청 처리
+            next = request.GET.get('next')
+            print(next)
+
+            if next:
+                return redirect(next)
             # 생성 후 Post의 detail화면으로 이동
             return redirect('post_detail', post_pk=post_pk)
-
-    
