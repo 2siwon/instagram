@@ -21,7 +21,6 @@ from django.contrib import admin
 from post import views as post_views
 from member import views as member_views
 
-
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
 
@@ -44,6 +43,11 @@ urlpatterns = [
     url(r'^member/signup/$',
         member_views.signup,
         name='signup'),
+
+    url(r'^member/login/$',
+        member_views.login,
+        name='login'),
+
 ]
 urlpatterns += static(
     settings.MEDIA_URL,
