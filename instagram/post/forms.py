@@ -18,11 +18,7 @@ class PostForm(forms.Form):
     # text를 받을 수 있는 필드 추가
     text = forms.CharField(
         max_length=5,
-        widget=forms.TextInput(
-            attrs={
-                'class':'form-control',
-            }
-        ),
+
     )
 
     def clean_text(self):
@@ -41,3 +37,5 @@ class CommentForm(forms.Form):
             }
         ),
     )
+
+

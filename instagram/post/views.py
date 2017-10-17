@@ -1,7 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 
-# Create your views here.
 from post.forms import PostForm, CommentForm
 from .models import Post, PostComment
 
@@ -88,3 +87,5 @@ def comment_create(request, post_pk):
                 return redirect(next)
             # 생성 후 Post의 detail화면으로 이동
             return redirect('post_detail', post_pk=post_pk)
+
+
