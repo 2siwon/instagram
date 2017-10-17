@@ -6,14 +6,16 @@ from django.db import models
 
 class Post(models.Model):
     photo = models.ImageField(upload_to='post')
-    # setting.py에
     created_at = models.DateTimeField(auto_now_add=True)
 
 
 class PostComment(models.Model):
+    # related_name을 적으면 역참조 가능
+    # post.postcomment_set.all의 정참조 접근을
+    # post.comments 로 대신하여 역참조 할 수 있음
     post = models.ForeignKey(
         Post,
-        related_name="comment",
+        related_name="comments",
     )
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)

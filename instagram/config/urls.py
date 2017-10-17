@@ -19,12 +19,25 @@ from django.conf.urls.static import static
 from django.contrib import admin
 
 from post import views
-from post.views import post_list
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^post/$', post_list, name='post_list'),
-    url(r'post/create/$', views.post_create, name='post_create'),
+
+    url(r'^post/$',
+        views.post_list,
+        name='post_list'),
+
+    url(r'post/create/$',
+        views.post_create,
+        name='post_create'),
+
+    url(r'post/(?P<post_pk>\d+)/comment/create/$',
+        views.comment_create,
+        name='comment_create'),
+
+    url(r'post/(?P<post_pk>\d+)/$',
+        views.post_detail,
+        name='post_detail'),
 ]
 urlpatterns += static(
     settings.MEDIA_URL,

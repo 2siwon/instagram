@@ -1,6 +1,8 @@
-from django.shortcuts import render
+from django.http import HttpResponse
+from django.shortcuts import render, get_object_or_404, redirect
 
 # Create your views here.
+from post.forms import PostForm, CommentForm
 from .models import Post, PostComment
 
 
@@ -23,29 +25,63 @@ def post_list(request):
 
 
 def post_create(request):
-    """
-    Post를 생성
-    반드시 photo필드에 해당하는 파일이 와야한다.
-    :param request:
-    :return:
-
-    1. post_create.html파일을 만들고
-        /post/create/ URL로 요청이 온 경우
-        이 뷰에서 해당 파일을 render해서 response
-
-    2. post_create.html에 form을 만들고,
-        file input과 button요소를 배치
-        file input의 name은 'photo'로 지정
-
-    3. 이 뷰에서 request.method가 'POST'일 경우,
-        request.POST와 request.FILES를 print문으로 출력
-        'GET'이면 템플릿파일을 보여주는 기존 로직을 그대로 실행
-    """
     if request.method == 'POST':
-        print(request.POST)
-        print(request.FILES)
+        # POST요청의 경우 PostForm인스턴스 생성과정에서 request.POST, request.FILES를 사용
+        form = PostForm(request.POST, request.FILES)
+        # 만약 form이 유효성검사를 통과헀다면 true리턴
+        if form.is_valid():
+            # 유효할 경우 Post인스턴스를 생성 및 저장
+            post = Post.objects.create(
+                photo=form.cleaned_data['photo']
+            )
 
-    elif request.method == 'GET':
-        return render(request, 'post/post_create.html')
+            return HttpResponse(f'<img src="{post.photo.url}">')
+
+    else:
+        # GET 요청의 경우 빈 PostForm인스턴스를 생성해서 템플릿에 전달
+        form = PostForm()
+
+    # GET 요청에선 이 부분이 무조건 실행
+    # POST 요청에선 form.is_valid()를 통과하지 못하면 이 부분이 실행
+    context = {
+        'form': form,
+    }
+    return render(request, 'post/post_create.html', context)
 
 
+def post_detail(request, post_pk):
+    # post = Post.objects.get(pk=post_pk)
+
+    # Post 에서 pk값을 찾고 없으면 404 error
+    post = get_object_or_404(Post, pk=post_pk)
+    comment_form = CommentForm()
+
+    context = {
+        'post': post,
+        'comment_form': comment_form,
+    }
+
+    return render(request, 'post/post_detail.html', context)
+
+
+def comment_create(request, post_pk):
+
+    # URL get parameter로 온 'post_pk'에 해당하는
+    # Post instacne를 'post'변수에 할당
+    # 찾지못하면 404Error를 브라우저에 리턴
+    post = get_object_or_404(Post, pk=post_pk)
+    if request.method == 'POST':
+        # 데이터가 바인딩된 CommentForm인스턴스를 form에 할당
+        form = CommentForm(request.POST)
+        # 유효성 검증
+        if form.is_valid():
+            # 통과한 경우, Post에 해당하는 Comment 인스턴스 생성
+            PostComment.objects.create(
+                post=post,
+                content=form.cleaned_data['content']
+            )
+
+            # 생성 후 Post의 detail화면으로 이동
+            return redirect('post_detail', post_pk=post_pk)
+
+    
