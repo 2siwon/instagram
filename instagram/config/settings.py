@@ -25,7 +25,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 # instagram_project/instagram/static/
 STATIC_DIR = os.path.join(BASE_DIR, 'static')
-STATIC_URL = '/static/'
+
 
 # STATIC_URL로의 요청은 STATICS_DIRS경로의 목록에서 파일을 찾아 리턴
 STATICFILES_DIRS = [

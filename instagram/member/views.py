@@ -1,9 +1,9 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
-from django.contrib.auth import get_user_model, authenticate, login as django_login
+from django.contrib.auth import get_user_model
 
-from .forms import SignupForm
+from .forms import SignupForm, LoginForm
 
 User = get_user_model()  # helper 함수
 
@@ -11,20 +11,10 @@ User = get_user_model()  # helper 함수
 def login(request):
     # POST 요청 (Form submit)의 경우
     if request.method == 'POST':
-        # 요청에서 username, password를 가져옴
-        username = request.POST['username']
-        password = request.POST['password']
-        # 해당하는 User 객체가 있는지 인증
-        user = authenticate(
-            username=username,
-            password=password,
-        )
-        # 인증에 성공하면 user변수에 User객체가 할당 실패시 None
-        if user is not None:
-            # Django의 Session에 해당 User정보를 추가
-            # Response에는 SessionKey값을 Set-Cookie 헤더에 담아 보냄
-            # 이후 브라우저와의 요청응답에서는 로그인을 유지함
-            django_login(request, user)
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            # LoginForm 내부에서 setattr로 동적인 속성(login)만듬
+            form.login(request)
             return redirect('post_list')
         else:
             return HttpResponse('Login credentials invalid')
