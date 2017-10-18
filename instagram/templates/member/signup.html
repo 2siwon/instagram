@@ -3,13 +3,6 @@
 {% block content %}
 
 <div class="signup">
-
-    <form action="" method="POST">
-        {% csrf_token %}
-        {{ form }}
-        <button class="btn btn-primary btn-block">가입하기</button>
-    </form>
-
+        {% include 'include/form-horizontal.html' with form=signup_form submit_text='회원가입' %}
 </div>
-
 {% endblock %}
