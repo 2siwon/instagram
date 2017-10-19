@@ -24,6 +24,16 @@ def post_list(request):
 
 
 def post_create(request):
+    """
+    1. 이 뷰에 접근할 때, 해당 사용자가 인증된 상태가 아니면 로그인 뷰로 redirect
+    2. form.is_valid() 를 통과한 후, 생성하는 Post객체에 author정보를 추가
+    :param request:
+    :return:
+    """
+
+    if not request.user.is_authenticated:
+        redirect('member:login')
+
     if request.method == 'POST':
         # POST요청의 경우 PostForm인스턴스 생성과정에서 request.POST, request.FILES를 사용
         form = PostForm(request.POST, request.FILES)
@@ -31,9 +41,9 @@ def post_create(request):
         if form.is_valid():
             # 유효할 경우 Post인스턴스를 생성 및 저장
             post = Post.objects.create(
-                photo=form.cleaned_data['photo']
+                author=request.user,
+                photo=form.cleaned_data['photo'],
             )
-
             return HttpResponse(f'<img src="{post.photo.url}">')
 
     else:
@@ -87,5 +97,3 @@ def comment_create(request, post_pk):
                 return redirect(next)
             # 생성 후 Post의 detail화면으로 이동
             return redirect('post:post_detail', post_pk=post_pk)
-
-

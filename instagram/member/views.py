@@ -45,7 +45,8 @@ def signup(request):
             return HttpResponse(f'{user.username }, { user.password }')
 
 
-    # GET 요청시 SignupForm 인스턴스를 signup_form 변수에 할당, context 에 같은 키/값으로 전달
+    # GET 요청시 SignupForm 인스턴스를 signup_form 변수에 할당,
+    # context 에 같은 키/값으로 전달
     else:
         form = SignupForm()
 
