@@ -86,6 +86,6 @@ def comment_create(request, post_pk):
             if next:
                 return redirect(next)
             # 생성 후 Post의 detail화면으로 이동
-            return redirect('post_detail', post_pk=post_pk)
+            return redirect('post:post_detail', post_pk=post_pk)
 
 
