@@ -48,6 +48,10 @@ urlpatterns = [
         member_views.login,
         name='login'),
 
+    url(r'^member/logout/$',
+        member_views.logout,
+        name='logout')
+
 ]
 urlpatterns += static(
     settings.MEDIA_URL,

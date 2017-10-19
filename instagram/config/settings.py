@@ -32,6 +32,7 @@ STATICFILES_DIRS = [
     STATIC_DIR,
 ]
 
+
 # instagram_project/instagram/templates/
 TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
 
@@ -53,8 +54,10 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-# Application definition
+AUTH_USER_MODEL = 'member.User'
 
+
+# Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
