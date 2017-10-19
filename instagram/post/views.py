@@ -12,7 +12,7 @@ def post_list(request):
     :param request:
     :return:
     """
-    posts = Post.objects.all()
+    posts = Post.objects.exclude(author__isnull=True)
     comment_form = CommentForm()
 
     context = {
@@ -52,7 +52,7 @@ def post_detail(request, post_pk):
     # post = Post.objects.get(pk=post_pk)
 
     # Post 에서 pk값을 찾고 없으면 404 error
-    post = get_object_or_404(Post, pk=post_pk)
+    post = get_object_or_404(pk=post_pk)
     comment_form = CommentForm()
 
     context = {

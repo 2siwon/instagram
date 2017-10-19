@@ -34,6 +34,7 @@ def logout(request):
     django_logout(request)
     return redirect('post:post_list')
 
+
 def signup(request):
     if request.method == 'POST':
         # 데이터가 binding 된 SignupForm 인스턴스를 생성
