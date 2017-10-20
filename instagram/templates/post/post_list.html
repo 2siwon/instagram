@@ -1,41 +1,41 @@
 {% extends 'base.html' %}
+<!--
+1. 작성자 username나오게
+2. Post를 나타내는 HTML요소를 include/post.html로 분리해서 사용
+3. Post및 Comment삭제 기능 추가(작성한 유저만 가능하도록)
+-->
+
 {% block content %}
-
 <div>
-        <div id="first"></div>
-        <a href="#last">맨 밑으로</a>
 
-        {% for post in posts %}
-        {% if post.author %}
-        <div id="post-{{ post.pk }}">
+    {% for post in posts %}
+    <div id="post-{{ post.pk }}" class="panel panel-default post">
+        <div class="panel-heading"
+        {% if user.pk == post.author.pk %}
+        style="color:blue" {% endif %}>
+        {{ post.author }}
+
+            {% if user.pk == post.author.pk %}
+            <form
+                    action="{% url 'post:post_delete' post_pk=post.pk author_pk=post.author_id %}"
+                    method="POST" style="float :right;">
+                {% csrf_token %}
+                <button class="btn btn-xs btn-primary">글 삭제</button>
+            </form>
+            {% endif %}
+
+        </div>
+        <div class="panel-body">
             <a href="{% url 'post:post_detail' post_pk=post.pk %}">
-                <img src="{{ post.photo.url }}">
+                <img src="{{ post.photo.url }}" class="img-post">
             </a>
 
-                <p><strong>댓글</strong></p>
+            <!--왜 안먹어?-->
+            {% include 'include/post.html' with submit_text='?next=/post/#post-comments-{{ post.pk }}' %}
 
 
-
-            <form action="{% url 'post:comment_create' post_pk=post.pk %}?next=/post/#post-comments-{{ post.pk }}" method="POST">
-                {% csrf_token %}
-                {{ comment_form }}
-                <button class="btn btn-block btn-primary">댓글 달기</button>
-            </form>
-
-            <ul id="post-comments-{{ post.pk }}">
-                {% for comment in post.comments.all %}
-                <li>{{ comment.content }}</li>
-                {% endfor %}
-            </ul>
         </div>
-        <br><br><br><br><br><br>
-        {% endif %}
-        {% endfor %}
-
-    <div id="last"></div>
-    <a href="#first">맨 위로</a>
-
+    </div>
+    {% endfor %}
 </div>
-
-
 {% endblock %}

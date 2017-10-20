@@ -1,0 +1,28 @@
+<div class="body-content">
+
+    <form
+            action="{% url 'post:comment_create' post_pk=post.pk %}{{ submit_text }}"
+            method="POST">
+        {% csrf_token %}
+        {{ comment_form }}
+        <button class="btn btn-primary btn-block">댓글달기</button>
+    </form>
+
+
+    <ul id="post-comments-{{ post.pk }}">
+
+            {% for comment in post.comments.all %}
+            <li>{{comment.author }} : {{ comment.content }}</li>
+
+                {% if user.pk == comment.author.pk %}
+                <form
+                action="{% url 'post:comment_delete' author_pk=comment.author.pk comment_pk=comment.pk %}"
+                method="POST">
+                    {% csrf_token %}
+                    <button class="btn btn-xs btn-primary">댓글삭제</button>
+                {% endif %}
+                </form>
+
+            {% endfor %}
+    </ul>
+</div>
