@@ -1,19 +1,13 @@
 {% extends 'base.html' %}
-<!--
-1. 작성자 username나오게
-2. Post를 나타내는 HTML요소를 include/post.html로 분리해서 사용
-3. Post및 Comment삭제 기능 추가(작성한 유저만 가능하도록)
--->
+
 
 {% block content %}
 <div>
 
     {% for post in posts %}
     <div id="post-{{ post.pk }}" class="panel panel-default post">
-        <div class="panel-heading"
-        {% if user.pk == post.author.pk %}
-        style="color:blue" {% endif %}>
-        {{ post.author }}
+        <div class="panel-heading">
+            {{ post.author }}
 
             {% if user.pk == post.author.pk %}
             <form

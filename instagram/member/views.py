@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import (
     get_user_model,
     logout as django_logout,
+    login as django_login,
 )
 
 from .forms import SignupForm, LoginForm
@@ -42,6 +43,7 @@ def signup(request):
         # 해당 form 이 자신의 필드에 유효한 데이터를 가지고 있는지 유효성 검사
         if form.is_valid():
             user = form.signup()
+            django_login(request, user)
             return HttpResponse(f'{user.username }, { user.password }')
 
 

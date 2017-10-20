@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.core.exceptions import PermissionDenied
 from django.shortcuts import render, get_object_or_404, redirect
 
 from post.forms import PostForm, CommentForm
@@ -94,7 +94,9 @@ def post_delete(request, author_pk, post_pk):
     if request.user.is_authenticated:
         post = Post.objects.filter(author_id=author_pk).get(pk=post_pk)
         post.delete()
-    return redirect('post:post_list')
+        return redirect('post:post_list')
+    else:
+        raise PermissionDenied('접근 권한이 없습니다.')
 
 
 def comment_delete(request, author_pk, comment_pk):
